@@ -1,320 +1,187 @@
-# Experiment 2: DDL Commands
+# Experiment 3: DML Commands
 
 ## AIM
-To study and implement DDL commands and different types of constraints.
+To study and implement DML (Data Manipulation Language) commands.
 
 ## THEORY
 
-### 1. CREATE
-Used to create a new relation (table).
-
+### 1. INSERT INTO
+Used to add records into a relation.
+These are three type of INSERT INTO queries which are as
+A)Inserting a single record
+**Syntax (Single Row):**
+```sql
+INSERT INTO table_name (field_1, field_2, ...) VALUES (value_1, value_2, ...);
+```
+**Syntax (Multiple Rows):**
+```sql
+INSERT INTO table_name (field_1, field_2, ...) VALUES
+(value_1, value_2, ...),
+(value_3, value_4, ...);
+```
+**Syntax (Insert from another table):**
+```sql
+INSERT INTO table_name SELECT * FROM other_table WHERE condition;
+```
+### 2. UPDATE
+Used to modify records in a relation.
+Syntax:
+```sql
+UPDATE table_name SET column1 = value1, column2 = value2 WHERE condition;
+```
+### 3. DELETE
+Used to delete records from a relation.
+**Syntax (All rows):**
+```sql
+DELETE FROM table_name;
+```
+**Syntax (Specific condition):**
+```sql
+DELETE FROM table_name WHERE condition;
+```
+### 4. SELECT
+Used to retrieve records from a table.
 **Syntax:**
 ```sql
-CREATE TABLE (
-  field_1 data_type(size),
-  field_2 data_type(size),
-  ...
-);
+SELECT column1, column2 FROM table_name WHERE condition;
 ```
-### 2. ALTER
-Used to add, modify, drop, or rename fields in an existing relation.
-(a) ADD
-```sql
-ALTER TABLE std ADD (Address CHAR(10));
-```
-(b) MODIFY
-```sql
-ALTER TABLE relation_name MODIFY (field_1 new_data_type(size));
-```
-(c) DROP
-```sql
-ALTER TABLE relation_name DROP COLUMN field_name;
-```
-(d) RENAME
-```sql
-ALTER TABLE relation_name RENAME COLUMN old_field_name TO new_field_name;
-```
-### 3. DROP TABLE
-Used to permanently delete the structure and data of a table.
-```sql
-DROP TABLE relation_name;
-```
-### 4. RENAME
-Used to rename an existing database object.
-```sql
-RENAME TABLE old_relation_name TO new_relation_name;
-```
-### CONSTRAINTS
-Constraints are used to specify rules for the data in a table. If there is any violation between the constraint and the data action, the action is aborted by the constraint. It can be specified when the table is created (using CREATE TABLE) or after it is created (using ALTER TABLE).
-### 1. NOT NULL
-When a column is defined as NOT NULL, it becomes mandatory to enter a value in that column.
-Syntax:
-```sql
-CREATE TABLE Table_Name (
-  column_name data_type(size) NOT NULL
-);
-```
-### 2. UNIQUE
-Ensures that values in a column are unique.
-Syntax:
-```sql
-CREATE TABLE Table_Name (
-  column_name data_type(size) UNIQUE
-);
-```
-### 3. CHECK
-Specifies a condition that each row must satisfy.
-Syntax:
-```sql
-CREATE TABLE Table_Name (
-  column_name data_type(size) CHECK (logical_expression)
-);
-```
-### 4. PRIMARY KEY
-Used to uniquely identify each record in a table.
-Properties:
-Must contain unique values.
-Cannot be null.
-Should contain minimal fields.
-Syntax:
-```sql
-CREATE TABLE Table_Name (
-  column_name data_type(size) PRIMARY KEY
-);
-```
-### 5. FOREIGN KEY
-Used to reference the primary key of another table.
-Syntax:
-```sql
-CREATE TABLE Table_Name (
-  column_name data_type(size),
-  FOREIGN KEY (column_name) REFERENCES other_table(column)
-);
-```
-### 6. DEFAULT
-Used to insert a default value into a column if no value is specified.
-
-Syntax:
-```sql
-CREATE TABLE Table_Name (
-  col_name1 data_type,
-  col_name2 data_type,
-  col_name3 data_type DEFAULT 'default_value'
-);
-```
-
-**Question 1**
+### Question 1
 --
--- Write a SQL Query  to change the name of attribute "name" to "first_name"  and add mobilenumber as number ,DOB as Date in the table Companies. 
+--Write a SQL statement to Update the address to '58 Lakeview, Magnolia' where supplier ID is 5 in the suppliers table.
 
 ```sql
- ALTER TABLE Companies
-rename name to first_name;
-ALTER TABLE Companies
-ADD COLUMN mobilenumber number;
-ALTER TABLE Companies
-ADD COLUMN DOB Date;
+-- UPDATE Suppliers
+set address='58 Lakeview, Magnolia'
+where supplier_id=5;
 ```
 
-**Output:**
+### Output:
 
-![image](https://github.com/user-attachments/assets/5adebeca-9b74-4b1f-92cf-9f64990c7825)
+![image](https://github.com/user-attachments/assets/781d2536-1091-44dc-9613-398ae3f13205)
 
 
-**Question 2**
+### Question 2
 ---
--- Create a table named Products with the following constraints:
-ProductID as INTEGER should be the primary key.
-ProductName as TEXT should be unique and not NULL.
-Price as REAL should be greater than 0.
-StockQuantity as INTEGER should be non-negative.
+-- Write a SQL statement to double the availability of the product with product_id 1.
 
 ```sql
- CREATE TABLE Products
-(
-ProductID INTEGER primary key,
-ProductName TEXT UNIQUE NOT NULL,
-Price REAL CHECK(Price>0),
-StockQuantity INTEGER CHECK(StockQuantity>0)
-);
+update products
+set availability=availability*2
+where product_id=1;
 ```
 
-**Output:**
-![image](https://github.com/user-attachments/assets/657c18ee-68f3-45d8-9773-acb008602e21)
+### Output:
+![image](https://github.com/user-attachments/assets/36bdadbc-1095-4879-bf47-d984c622de7b)
 
 
-**Question 3**
+### Question 3
 ---
--- Create a table named Products with the following columns:
-
-ProductID as INTEGER
-ProductName as TEXT
-Price as REAL
-Stock as INTEGER
+--  Update the total selling price to quantity sold multiplied by updated selling price per unit where product id is 10 in the sales table.
 
 ```sql
-CREATE TABLE Products
-(
-ProductID INTEGER,
-ProductName TEXT,
-Price REAL,
-Stock INTEGER
-);
+update SALES
+set total_sell_price=quantity*sell_price
+where product_id=10;
 ```
 
-**Output:**
+### Output:
+![image](https://github.com/user-attachments/assets/ca547d63-5b6f-42e8-8fa9-520e35431f5c)
 
-![image](https://github.com/user-attachments/assets/0d1e2ed1-fee3-4cd1-9107-215e72ef9594)
 
-
-**Question 4**
+### Question 4
 ---
--- Insert the following employees into the Employee table:
+-- Write a SQL query to Delete customers from 'customer' table where 'GRADE' is not equal to 3.
 
-EmployeeID  Name        Position    Department  Salary
-----------  ----------  ----------  ----------  ----------
-2           John Smith  Developer   IT          75000
-3           Anna Bell   Designer    Marketing   68000
 ```sql
-INSERT INTO Employee(EmployeeID,Name,Position,Department ,Salary)
-values(2,           'John Smith'  ,'Developer'  , 'IT'  ,        75000);
-INSERT INTO Employee(EmployeeID,Name,Position,Department ,Salary)
-values(3,           'Anna Bell'  ,'Designer'  , 'Marketing'  ,        68000);
+DELETE FROM Customer
+where GRADE<>3;
 ```
 
-**Output:**
-![image](https://github.com/user-attachments/assets/19871a6d-b967-4892-969b-07e40479cefd)
+### Output:
+![image](https://github.com/user-attachments/assets/ba99906b-bbb2-4834-8383-621acb16548f)
 
 
-**Question 5**
+### Question 5
 ---
---Create a table named Departments with the following columns:
-
-DepartmentID as INTEGER
-DepartmentName as TEXT
+--Write a SQL query to delete a doctor from Doctors table whose Specialization is 'Pediatrics' and First name is 'Michael'.
 
 ```sql
-CREATE TABLE Departments
-(
-DepartmentID INTEGER,
-DepartmentName TEXT
-
-);
+DELETE FROM Doctors
+where specialization='Pediatrics' and first_name='Michael';
 ```
 
-**Output:**
+### Output:
+![image](https://github.com/user-attachments/assets/c08ad2ca-5121-4fbb-9eb4-fd9dbf526915)
 
-![image](https://github.com/user-attachments/assets/03354192-0e68-429e-adbc-8e3145b9ac23)
 
-**Question 6**
+### Question 6
 ---
--- Insert the below data into the Employee table, allowing the Department and Salary columns to take their default values.
-
-EmployeeID  Name         Position
-----------  -----------  ----------
-4           Emily White  Analyst
-
-Note: The Department and Salary columns will use their default values.  
-
+--Write a SQL query to Delete customers from 'customer' table where 'GRADE' is less than 2.
 ```sql
-INSERT INTO Employee(EmployeeID,Name,Position)
-values(4           ,'Emily White','Analyst');
+DELETE FROM Customer 
+where GRADE<2;
 ```
 
-**Output:**
-![image](https://github.com/user-attachments/assets/fedeb403-34e6-4d28-bef6-f5ce460d2a0d)
+### Output:
 
+![image](https://github.com/user-attachments/assets/d0a5a975-1384-42d1-9dd0-e36c036da8c0)
 
-
-**Question 7**
+### Question 7
 ---
--- Create a table named Orders with the following constraints:
-OrderID as INTEGER should be the primary key.
-OrderDate as DATE should be not NULL.
-CustomerID as INTEGER should be a foreign key referencing Customers(CustomerID).
+-- Write a SQL query to label rows in the Calculations table as 'Even' if value1 is even, otherwise 'Odd'.
 
 ```sql
-CREATE TABLE Orders
-(
-OrderID INTEGER primary key,
-OrderDate DATE NOT NULL,
-CustomerID INTEGER,
-FOREIGN KEY(CustomerID) REFERENCES Customers(CustomerID)
-);
-
+SELECT id,value1,
+case when (value1%2=0) THEN 'Even' else 'Odd'
+end as parity
+from Calculations;
 ```
 
-**Output:**
+### Output:=
+![image](https://github.com/user-attachments/assets/9d3a847c-16d3-4b6f-a9dd-3a927382060a)
 
-![image](https://github.com/user-attachments/assets/e2810841-1cfc-47c6-8ec1-85d72545f94d)
 
-
-**Question 8**
+### Question 8
 ---
--- Insert the following students into the Student_details table:
-RollNo      Name        Gender      Subject     MARKS
-----------  ----------  ----------  ----------  ----------
-202            Ella King         F           Chemistry   87
-203            James Bond   M          Literature    78
-
- 
+--Write a SQL query to find all employees who were hired in the year 2022 from emp table.
 
 ```sql
-INSERT INTO Student_details(RollNo ,Name    ,    Gender  ,    Subject ,    MARKS)
-values(202       ,  'Ella King'  ,'F','Chemistry' ,  87);
-INSERT INTO Student_details(RollNo ,Name    ,    Gender  ,    Subject ,    MARKS)
-values(203       ,  'James Bond'  ,'M','Literature' ,  78);
+SELECT * from emp
+where hiredate like '%2022%';
 ```
 
-**Output:**
+### Output:
+![image](https://github.com/user-attachments/assets/8d0fb572-e9ab-422c-9420-93a177cd0b45)
 
-![image](https://github.com/user-attachments/assets/747af22d-e1ed-4b8b-a4a0-1747733f20ad)
 
-**Question 9**
+### Question 9
 ---
-Create a new table named item with the following specifications and constraints:
-item_id as TEXT and as primary key.
-item_desc as TEXT.
-rate as INTEGER.
-icom_id as TEXT with a length of 4.
-icom_id is a foreign key referencing com_id in the company table.
-The foreign key should cascade updates and deletes.
-item_desc and rate should not accept NULL.
+-- Write a query to fetch the number of employees working in the department ‘HR’.
 ```sql
-CREATE TABLE item
-(
-item_id TEXT primary key,
-item_desc TEXT not null,
-rate INTEGER not null,
-icom_id TEXT(4),
-FOREIGN KEY(icom_id) REFERENCES company(com_id)
-on update cascade
-on delete cascade
-);
+SELECT COUNT(*) 
+from EmployeeInfo
+where department='HR';
 ```
 
-**Output:**
-![image](https://github.com/user-attachments/assets/45c5daeb-3428-40b2-a4f8-3f85f20f5c02)
+### Output:
+![image](https://github.com/user-attachments/assets/649f436b-38e1-404e-a848-2920e73a6667)
 
 
-**Question 10**
+### Question 10
 ---
---Write an SQL query to add two new columns, designation and net_salary, to the table Companies. The designation column should have a data type of varchar(50), and the net_salary column should have a data type of number.
-
+--Write a SQL query to calculate the discounted price for products where the discount percentage is greater than 0, and order the results by discounted_price in ascending order. Return product_id, original_price, discount_percentage, and discounted_price.
 ```sql
-ALTER TABLE Companies
-ADD COLUMN designation varchar(50);
-ALTER TABLE Companies
-ADD COLUMN net_salary number;
+SELECT product_id,original_price,discount_percentage,original_price*(1-discount_percentage) as discounted_price
+from Products
+where discount_percentage>0 
+ORDER BY discounted_price ASC;
 ```
 
-**Output:**
+### Output:
+![image](https://github.com/user-attachments/assets/d0fe0ae6-63a3-40d9-8105-b79dba0adb99)
 
-![image](https://github.com/user-attachments/assets/069fcc9f-5be0-400e-9cea-ae0a057886b6)
-
-## COMPLETION GRADES
-![image](https://github.com/user-attachments/assets/292189eb-909e-4c0d-9f42-44ebd02128a3)
+## 
 
 
 ## RESULT
-Thus, the SQL queries to implement different types of constraints and DDL commands have been executed successfully.
+Thus, the SQL queries to implement DML commands have been executed successfully.
